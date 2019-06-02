@@ -1,19 +1,25 @@
 import sqlite3
 
+dbOpen = False
+
 def connect(dbName):
-	global conn, crsr
+	global dbOpen, conn, crsr
 	conn = sqlite3.connect(dbName)
 	crsr = conn.cursor()
+	dbOpen = True
 
 def load(fileName):
-	global conn, crsr
-	conn.close()
+	global dbOpen, conn, crsr
+	if dbOpen:
+		conn.close()
+		dbOpen = False		# set in case connect fails
 	conn = sqlite3.connect(':memory:')
 	f = open(fileName, 'r')
 	sql = f.read()
 	f.close()
 	conn.executescript(sql)
 	crsr = conn.cursor()
+	dbOpen = True
 
 def store(fileName):
 	f = open(fileName, 'w')
@@ -37,10 +43,13 @@ def deleteStudent(name):
 	return sqlStr
 
 def getStudents():
-	crsr.execute('SELECT * FROM students')
-	return crsr.fetchall()
+	sqlStr = 'SELECT * FROM students'
+	crsr.execute(sqlStr)
+	return (sqlStr, crsr.fetchall())
 
 def close():
+	global dbOpen
 	conn.commit()
 	conn.close()
+	dbOpen = False
 
