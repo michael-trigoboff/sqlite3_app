@@ -28,7 +28,8 @@ def loadFn(cmd):
 	db.load(cmd[1])
 
 def printFn(cmd):
-	students = db.getStudents()
+	sqlStr, students = db.getStudents()
+	print(sqlStr + '\n')
 	if len(students) == 0:
 		print('-- no students --')
 	else:
@@ -37,6 +38,7 @@ def printFn(cmd):
 		print(hdrFormatStr.format('----', '-------', '----'))
 		for student in students:
 			print(f'{student[0][:10]:10} {student[1]:7} {student[2]:8.2f}')
+	print()
 
 def quitFn(cmd):
 	global quitRequested
@@ -59,10 +61,10 @@ cmds = {
 }
 
 def run(fileName):
-	db.connect(':memory:')
 	if fileName is not None:
 		db.load(fileName)
 	else:
+		db.connect(':memory:')
 		db.createTable()
 	while not quitRequested:
 		try:
