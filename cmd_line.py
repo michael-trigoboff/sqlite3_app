@@ -16,6 +16,11 @@ def deleteFn(cmd):
 	sqlStr = db.deleteStudent(cmd[1])
 	print(sqlStr)
 
+def helpFn(cmd):
+	for cmdInfo in cmds.items():
+		cmdName = cmdInfo[0] + ':'
+		print(f'{cmdName:10}{cmdInfo[1][1]:}')
+
 def loadFn(cmd):
 	if len(cmd) != 2:
 		print('load command needs: file name')
@@ -44,12 +49,13 @@ def storeFn(cmd):
 	db.store(cmd[1])
 
 cmds = {
-	'add':		addFn,
-	'delete':	deleteFn,
-	'load':		loadFn,
-	'print':	printFn,
-	'quit': 	quitFn,
-	'store': 	storeFn
+	'add':		(addFn, 	'add a student to the database'),
+	'delete':	(deleteFn,	'delete a student from the database'),
+	'help':		(helpFn,	'print command documentation'),
+	'load':		(loadFn,	'load a database file'),
+	'print':	(printFn,	'print the students'),
+	'quit': 	(quitFn,	'quit the app'),
+	'store': 	(storeFn,	'store a database file')
 }
 
 def run(fileName):
@@ -63,9 +69,8 @@ def run(fileName):
 			line = input('> ')
 			if line == '':
 				continue
-			cmd = line\
-				.split()
-			cmds[cmd[0]](cmd)
+			cmd = line.split()
+			cmds[cmd[0]][0](cmd)
 		except KeyError:
 			print(f'{cmd[0]:} is not a command')
 		except Exception as e:
