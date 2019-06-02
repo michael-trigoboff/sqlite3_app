@@ -50,7 +50,7 @@ def run(fileName):
 	else:
 		db.connect(':memory:')
 		db.createTable()
-	students = db.getStudents()
+	students = db.getStudents()[1]
 	nStudents = len(students)
 	if nStudents > 0:
 		studentIndex = 0
