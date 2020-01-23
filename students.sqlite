@@ -1,0 +1,7 @@
+BEGIN TRANSACTION;
+CREATE TABLE students (name TEXT, credits INTEGER, gpa REAL);
+INSERT INTO "students" VALUES('bob',33,3.3);
+INSERT INTO "students" VALUES('ann',2,2.2);
+INSERT INTO "students" VALUES('joe',44,4.4);
+INSERT INTO "students" VALUES('sue',0,0.0);
+COMMIT;
